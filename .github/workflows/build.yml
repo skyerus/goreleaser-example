@@ -1,9 +1,9 @@
 name: build
 
 on:
-  create:
-    tags:
-      - 'v*'
+  push:
+    branches:
+      - 'master'
 
 jobs:
   build:
@@ -32,10 +32,16 @@ jobs:
         run: |
           go mod tidy
           go test -v ./...
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.39.0
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
-        if: success() && startsWith(github.ref, 'refs/tags/')
+        if: success()
         with:
           version: latest
           args: release --rm-dist
