@@ -1,3 +1,3 @@
-module github.com/goreleaser/example
+module github.com/skyerus/goreleaser-example
 
-go 1.15
+go 1.17
